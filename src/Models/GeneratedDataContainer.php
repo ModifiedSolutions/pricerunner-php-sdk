@@ -1,51 +1,51 @@
 <?php
 
-namespace PricerunnerSDK\Models;
-
-/**
- * Class GeneratedDataContainer
- * @package PricerunnerSDK\Models
- */
-class GeneratedDataContainer
-{
-    /**
-     * Array of all errors
-     *
-     * @var array
-     */
-    private $errors;
+    namespace PricerunnerSDK\Models;
 
     /**
-     * String containing the finished XML
-     *
-     * @var string
+     * Class GeneratedDataContainer
+     * @package PricerunnerSDK\Models
      */
-    private $xmlString;
-
-    /**
-     * GeneratedDataContainer constructor.
-     * @param string $xmlString
-     * @param array $errors
-     */
-    public function __construct($xmlString, $errors)
+    class GeneratedDataContainer
     {
-        $this->xmlString = $xmlString;
-        $this->errors = $errors;
-    }
+        /**
+         * Array of all errors
+         *
+         * @var array
+         */
+        private $errors;
 
-    /**
-     * @return string
-     */
-    public function getXmlString()
-    {
-        return $this->xmlString;
-    }
+        /**
+         * String containing the finished XML
+         *
+         * @var string
+         */
+        private $xmlString;
 
-    /**
-     * @return array
-     */
-    public function getErrors()
-    {
-        return $this->errors;
+        /**
+         * GeneratedDataContainer constructor.
+         * @param string $xmlString
+         * @param array $errors
+         */
+        public function __construct($xmlString, $errors)
+        {
+            $this->xmlString = $xmlString;
+            $this->errors = $errors;
+        }
+
+        /**
+         * @return string
+         */
+        public function getXmlString()
+        {
+            return $this->xmlString;
+        }
+
+        /**
+         * @return array
+         */
+        public function getErrors()
+        {
+            return $this->errors;
+        }
     }
-}

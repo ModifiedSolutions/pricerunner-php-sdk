@@ -1,79 +1,78 @@
 <?php
-namespace PricerunnerSDK\Services;
 
-use Exception;
-use stdClass;
-use Unirest\Request;
+    namespace PricerunnerSDK\Services;
 
-class PricerunnerService
-{
-    const BASE_URL = "http://udvikling.modified.dk/client/pricerunner/api/v1";
+    use Exception;
+    use stdClass;
 
-
-    private static function post($url, $body, $headers)
+    class PricerunnerService
     {
-        $ch = curl_init();
+        const BASE_URL = "http://udvikling.modified.dk/client/pricerunner/api/v1";
 
-        $curlOptions = array(
-            CURLOPT_URL => $url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => $body,
-            CURLOPT_ENCODING => '',
-            CURLOPT_HTTPHEADER => $headers,
-            CURLOPT_HEADER => false,
-        );
+        private static function post($url, $body, $headers)
+        {
+            $ch = curl_init();
 
-        curl_setopt_array($ch, $curlOptions);
+            $curlOptions = array(
+                CURLOPT_URL => $url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_POST => true,
+                CURLOPT_POSTFIELDS => $body,
+                CURLOPT_ENCODING => '',
+                CURLOPT_HTTPHEADER => $headers,
+                CURLOPT_HEADER => false,
+            );
 
-        $response   = curl_exec($ch);
-        $error      = curl_error($ch);
-        $httpStatusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_setopt_array($ch, $curlOptions);
 
-        if ($error) {
-            throw new Exception($error);
+            $response   = curl_exec($ch);
+            $error      = curl_error($ch);
+            $httpStatusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+            if ($error) {
+                throw new Exception($error);
+            }
+
+            $toReturn = new stdClass();
+            $toReturn->code = $httpStatusCode;
+            $toReturn->body = json_decode($response);
+
+            return $toReturn;
         }
 
-        $toReturn = new stdClass();
-        $toReturn->code = $httpStatusCode;
-        $toReturn->body = json_decode($response);
+        /**
+         * Posts a Pricerunner shop registration
+         *
+         * @param $name
+         * @param $phone
+         * @param $email
+         * @param $domain
+         * @param $feedUrl
+         * @return mixed
+         * @throws Exception
+         */
+        public static function postRegistration($name, $phone, $email, $domain, $feedUrl)
+        {
+            $headers = array(
+                'user-agent: pricerunner-sdk 1.0'
+            );
 
-        return $toReturn;
-    }
+            $query = array(
+                'name' => $name,
+                'phone' => $phone,
+                'email' => $email,
+                'domain' => $domain,
+                'feedUrl' => $feedUrl
+            );
 
-    /**
-     * Posts a Pricerunner shop registration
-     *
-     * @param $name
-     * @param $phone
-     * @param $email
-     * @param $domain
-     * @param $feedUrl
-     * @return mixed
-     * @throws Exception
-     */
-    public static function postRegistration($name, $phone, $email, $domain, $feedUrl)
-    {
-        $headers = array(
-            'user-agent: pricerunner-sdk 1.0'
-        );
+            $response = static::post(PricerunnerService::BASE_URL . "/registration", $query, $headers);
 
-        $query = array(
-            'name' => $name,
-            'phone' => $phone,
-            'email' => $email,
-            'domain' => $domain,
-            'feedUrl' => $feedUrl
-        );
-
-        $response = static::post(PricerunnerService::BASE_URL . "/registration", $query, $headers);
-
-        if ($response->code == 200) {
-            return $response->body;
-        } else {
-            throw new Exception($response->body->statusText, $response->code);
+            if ($response->code == 200) {
+                return $response->body;
+            } else {
+                throw new Exception($response->body->statusText, $response->code);
+            }
         }
     }
-}

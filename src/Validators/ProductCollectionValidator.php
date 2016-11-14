@@ -1,112 +1,112 @@
 <?php
 
-namespace PricerunnerSDK\Validators;
+    namespace PricerunnerSDK\Validators;
 
-use PricerunnerSDK\Errors\ProductErrorLevels;
-use PricerunnerSDK\Models\Product;
-
-/**
- * Class ProductCollectionValidator
- * @package PricerunnerSDK\Validators
- */
-class ProductCollectionValidator
-{
-    /**
-     * Contains an array of unique properties values
-     *
-     * @var array
-     */
-    private $uniquePropertiesContainer = array(
-        'sku' => array(),
-        'ean' => array()
-    );
+    use PricerunnerSDK\Models\Product;
+    use PricerunnerSDK\Errors\ProductErrorLevels;
 
     /**
-     * Contains an array of which properties should be unique
-     *
-     * @var array
+     * Class ProductCollectionValidator
+     * @package PricerunnerSDK\Validators
      */
-    private $uniqueProperties = array(
-        'sku',
-        'ean'
-    );
-
-    /**
-     * @param Product $product
-     * @return ProductValidator
-     */
-    public function addAndValidateProduct(Product $product)
+    class ProductCollectionValidator
     {
-        $productValidator = $this->createProductValidator($product);
-        $productValidator->validate();
+        /**
+         * Contains an array of unique properties values
+         *
+         * @var array
+         */
+        private $uniquePropertiesContainer = array(
+            'sku' => array(),
+            'ean' => array()
+        );
 
-        $this->validateProductAgainstProductCollection($product, $productValidator);
+        /**
+         * Contains an array of which properties should be unique
+         *
+         * @var array
+         */
+        private $uniqueProperties = array(
+            'sku',
+            'ean'
+        );
 
-        $this->uniquePropertiesContainer['sku'][] = $product->getSku();
-        $this->uniquePropertiesContainer['ean'][] = $product->getEan();
+        /**
+         * @param Product $product
+         * @return ProductValidator
+         */
+        public function addAndValidateProduct(Product $product)
+        {
+            $productValidator = $this->createProductValidator($product);
+            $productValidator->validate();
 
-        return $productValidator;
-    }
+            $this->validateProductAgainstProductCollection($product, $productValidator);
 
-    /**
-     * @param Product $product
-     * @return bool
-     */
-    private function checkIfEanExists(Product $product)
-    {
-        $ean = $product->getEan();
-        if(empty($ean)) {
-            return false;
+            $this->uniquePropertiesContainer['sku'][] = $product->getSku();
+            $this->uniquePropertiesContainer['ean'][] = $product->getEan();
+
+            return $productValidator;
         }
 
-        return in_array($ean, $this->uniquePropertiesContainer['ean']);
-    }
+        /**
+         * @param Product $product
+         * @return bool
+         */
+        private function checkIfEanExists(Product $product)
+        {
+            $ean = $product->getEan();
+            if(empty($ean)) {
+                return false;
+            }
 
-    protected function validateEan(Product $product, ProductValidator $productValidator)
-    {
-        if($this->checkIfEanExists($product)) {
-            $productValidator->addError(
-                'ean',
-                'Ean value already exists, please check your products',
-                ProductErrorLevels::ERROR_TYPE_FATAL
-            );
-        }
-    }
-
-    /**
-     * @param Product $product
-     * @return bool
-     */
-    private function checkIfSkuExists(Product $product)
-    {
-        $sku = $product->getSku();
-        if(empty($sku)) {
-            return false;
+            return in_array($ean, $this->uniquePropertiesContainer['ean']);
         }
 
-        return in_array($sku, $this->uniquePropertiesContainer['sku']);
-    }
-
-    protected function validateSku(Product $product, ProductValidator $productValidator)
-    {
-        if($this->checkIfSkuExists($product)) {
-            $productValidator->addError(
-                'sku',
-                'Sku value already exists, please check your products',
-                ProductErrorLevels::ERROR_TYPE_FATAL
-            );
+        protected function validateEan(Product $product, ProductValidator $productValidator)
+        {
+            if($this->checkIfEanExists($product)) {
+                $productValidator->addError(
+                    'ean',
+                    'Ean value already exists, please check your products',
+                    ProductErrorLevels::ERROR_TYPE_FATAL
+                );
+            }
         }
-    }
 
-    protected function createProductValidator($product)
-    {
-        return new ProductValidator($product);
-    }
+        /**
+         * @param Product $product
+         * @return bool
+         */
+        private function checkIfSkuExists(Product $product)
+        {
+            $sku = $product->getSku();
+            if(empty($sku)) {
+                return false;
+            }
 
-    protected function validateProductAgainstProductCollection(Product $product, ProductValidator $productValidator)
-    {
-        $this->validateEan($product, $productValidator);
-        $this->validateSku($product, $productValidator);
-    }
+            return in_array($sku, $this->uniquePropertiesContainer['sku']);
+        }
 
-}
+        protected function validateSku(Product $product, ProductValidator $productValidator)
+        {
+            if($this->checkIfSkuExists($product)) {
+                $productValidator->addError(
+                    'sku',
+                    'Sku value already exists, please check your products',
+                    ProductErrorLevels::ERROR_TYPE_FATAL
+                );
+            }
+        }
+
+        protected function createProductValidator($product)
+        {
+            return new ProductValidator($product);
+        }
+
+        protected function validateProductAgainstProductCollection(Product $product, ProductValidator $productValidator)
+        {
+            $this->validateEan($product, $productValidator);
+            $this->validateSku($product, $productValidator);
+        }
+
+    }

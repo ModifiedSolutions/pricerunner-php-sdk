@@ -1,86 +1,86 @@
 <?php
 
-namespace PricerunnerSDK\Generators;
+    namespace PricerunnerSDK\Generators;
 
-use DOMDocument;
-use DOMCdataSection;
-use PricerunnerSDK\Models\Product;
-use PricerunnerSDK\Validators\ProductCollectionValidator;
-use PricerunnerSDK\Models\GeneratedDataContainer;
+    use DOMDocument;
+    use DOMCdataSection;
+    use PricerunnerSDK\Models\Product;
+    use PricerunnerSDK\Validators\ProductCollectionValidator;
+    use PricerunnerSDK\Models\GeneratedDataContainer;
 
-/**
- * Class XmlGenerator
- * @package PricerunnerSDK\Generators
- */
-class XmlGenerator
-{
     /**
-     * @param Product[] $productArray
-     * @param bool $withCData
-     * @param ProductCollectionValidator $productCollectionValidator
-     * @return GeneratedDataContainer
+     * Class XmlGenerator
+     * @package PricerunnerSDK\Generators
      */
-    public static function getGeneratedData(
-        $productArray,
-        $withCData = false,
-        ProductCollectionValidator $productCollectionValidator = null
-    )
+    class XmlGenerator
     {
-        $errors = array();
+        /**
+         * @param Product[] $productArray
+         * @param bool $withCData
+         * @param ProductCollectionValidator $productCollectionValidator
+         * @return GeneratedDataContainer
+         */
+        public static function getGeneratedData(
+            $productArray,
+            $withCData = false,
+            ProductCollectionValidator $productCollectionValidator = null
+        )
+        {
+            $errors = array();
 
-        $domTree = new DOMDocument('1.0', 'UTF-8');
+            $domTree = new DOMDocument('1.0', 'UTF-8');
 
-        $domTree->preserveWhiteSpace = false;
-        $domTree->formatOutput = true;
+            $domTree->preserveWhiteSpace = false;
+            $domTree->formatOutput = true;
 
-        $xmlRoot = $domTree->createElement("products");
-        $xmlRoot = $domTree->appendChild($xmlRoot);
+            $xmlRoot = $domTree->createElement("products");
+            $xmlRoot = $domTree->appendChild($xmlRoot);
 
-        if($productCollectionValidator == null) {
-            $productCollectionValidator = new ProductCollectionValidator();
-        }
+            if($productCollectionValidator == null) {
+                $productCollectionValidator = new ProductCollectionValidator();
+            }
 
-        foreach ($productArray as $product) {
+            foreach ($productArray as $product) {
 
-            $productValidator = $productCollectionValidator->addAndValidateProduct($product);
+                $productValidator = $productCollectionValidator->addAndValidateProduct($product);
 
-            if(!$productValidator->getErrorCount()) {
+                if(!$productValidator->getErrorCount()) {
 
-                if($productValidator->getWarningCount()) {
+                    if($productValidator->getWarningCount()) {
+                        $errors[] = $productValidator->getErrors();
+                    }
+
+                    $currentProduct = $domTree->createElement("product");
+                    $currentProduct = $xmlRoot->appendChild($currentProduct);
+
+                    $productVars = $product->toArray();
+
+                    foreach ($productVars as $productVarKey => $productVarVal) {
+                        if($withCData) {
+                            $productElement = $domTree->createElement($productVarKey);
+                            $productElement->appendChild(new DOMCdataSection($productVarVal));
+
+                            $currentProduct->appendChild($productElement);
+                        } else {
+                            $currentProduct->appendChild(
+                                $domTree->createElement(
+                                    $productVarKey,
+                                    $productVarVal
+                                )
+                            );
+                        }
+                    }
+
+                } else {
                     $errors[] = $productValidator->getErrors();
                 }
-
-                $currentProduct = $domTree->createElement("product");
-                $currentProduct = $xmlRoot->appendChild($currentProduct);
-
-                $productVars = $product->toArray();
-
-                foreach ($productVars as $productVarKey => $productVarVal) {
-                    if($withCData) {
-                        $productElement = $domTree->createElement($productVarKey);
-                        $productElement->appendChild(new DOMCdataSection($productVarVal));
-
-                        $currentProduct->appendChild($productElement);
-                    } else {
-                        $currentProduct->appendChild(
-                            $domTree->createElement(
-                                $productVarKey,
-                                $productVarVal
-                            )
-                        );
-                    }
-                }
-
-            } else {
-                $errors[] = $productValidator->getErrors();
             }
+
+            $xmlString = $domTree->saveXml($domTree, LIBXML_NOEMPTYTAG);
+
+            return new GeneratedDataContainer(
+                $xmlString,
+                $errors
+            );
         }
-
-        $xmlString = $domTree->saveXml($domTree, LIBXML_NOEMPTYTAG);
-
-        return new GeneratedDataContainer(
-            $xmlString,
-            $errors
-        );
     }
-}

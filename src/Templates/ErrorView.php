@@ -1,7 +1,7 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
+        <meta charset="UTF-8" />
         <title>Webshop Product errors</title>
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -27,8 +27,6 @@
                 margin-bottom: 15px;
                 border-radius: 3px;
             }
-
-
         </style>
 
         <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
