@@ -163,12 +163,13 @@
         }
 
         /**
+         * Price must be set but can't be zero.
          * @return bool
          */
         protected function isPriceValid()
         {
             $price = $this->product->getPrice();
-            return !empty($price);
+            return isset($price) && (float) $price != 0.0;
         }
 
         protected function validatePrice($errorMessage = 'Error validating price')
@@ -177,12 +178,13 @@
         }
 
         /**
+         * Shipping cost is allowed to be zero, but must be set.
          * @return bool
          */
         protected function isShippingCostValid()
         {
             $shippingCost = $this->product->getShippingCost();
-            return !empty($shippingCost);
+            return $shippingCost != '';
         }
 
         protected function validateShippingCost($errorMessage = 'Error validating shippingCost')
