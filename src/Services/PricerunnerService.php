@@ -7,7 +7,7 @@
 
     class PricerunnerService
     {
-        const BASE_URL = "http://pricerunnerapi.dk.linux52.unoeuro-server.com/v1";
+        const BASE_URL = "http://pricerunnerapi.dk/v1";
 
         private static function post($url, $body, $headers)
         {
