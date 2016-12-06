@@ -197,7 +197,7 @@
          */
         protected function isProductUrlValid()
         {
-            return filter_var($this->product->getProductUrl(), FILTER_VALIDATE_URL) !== false;
+            return preg_match('/^(?:(?:https?):\/\/|www\.)[\S\d]+\.[\S\d]+$/', $this->product->getProductUrl()) === 1;
         }
 
         protected function validateProductUrl($errorMessage = 'Error validating productUrl')
