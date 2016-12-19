@@ -1,3 +1,6 @@
+<?php
+  if (!defined('PRICRUNNER_OFFICIAL_PLUGIN_VERSION')) exit;
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>

@@ -2,6 +2,8 @@
 
     namespace PricerunnerSDK\Models;
 
+    if (!defined('PRICRUNNER_OFFICIAL_PLUGIN_VERSION')) exit;
+    
     /**
      * Class GeneratedDataContainer
      * @package PricerunnerSDK\Models

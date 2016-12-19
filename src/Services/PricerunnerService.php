@@ -5,6 +5,8 @@
     use Exception;
     use stdClass;
 
+    if (!defined('PRICRUNNER_OFFICIAL_PLUGIN_VERSION')) exit;
+    
     class PricerunnerService
     {
         const BASE_URL = "http://pricerunnerapi.dk/v1";

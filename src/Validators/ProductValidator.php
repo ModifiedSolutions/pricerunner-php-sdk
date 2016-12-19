@@ -2,6 +2,8 @@
 
     namespace PricerunnerSDK\Validators;
 
+    if (!defined('PRICRUNNER_OFFICIAL_PLUGIN_VERSION')) exit;
+    
     /**
      * Class ProductValidator
      * @package PricerunnerSDK\Validators

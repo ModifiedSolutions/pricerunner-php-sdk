@@ -1,5 +1,7 @@
 <?php
 
+    if (!defined('PRICRUNNER_OFFICIAL_PLUGIN_VERSION')) exit;
+
     /*
      * Root directory of the PricerunnerSDK folder
      */

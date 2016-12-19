@@ -5,6 +5,8 @@
     use Exception;
     use PricerunnerSDK\Errors\FileGeneratorErrors;
 
+    if (!defined('PRICRUNNER_OFFICIAL_PLUGIN_VERSION')) exit;
+    
     /**
      * Class FileGenerator
      * @package PricerunnerSDK\Generators

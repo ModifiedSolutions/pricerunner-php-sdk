@@ -8,6 +8,8 @@
     use PricerunnerSDK\Validators\ProductCollectionValidator;
     use PricerunnerSDK\Models\GeneratedDataContainer;
 
+    if (!defined('PRICRUNNER_OFFICIAL_PLUGIN_VERSION')) exit;
+    
     /**
      * Class XmlGenerator
      * @package PricerunnerSDK\Generators

@@ -5,6 +5,8 @@
     use PricerunnerSDK\Models\Product;
     use PricerunnerSDK\Errors\ProductErrorLevels;
 
+    if (!defined('PRICRUNNER_OFFICIAL_PLUGIN_VERSION')) exit;
+    
     /**
      * Class ProductCollectionValidator
      * @package PricerunnerSDK\Validators

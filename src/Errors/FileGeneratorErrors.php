@@ -2,6 +2,8 @@
 
     namespace PricerunnerSDK\Errors;
 
+    if (!defined('PRICRUNNER_OFFICIAL_PLUGIN_VERSION')) exit;
+    
     /**
      * Class FileGeneratorErrors
      * @package PricerunnerSDK\Errors

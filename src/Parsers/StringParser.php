@@ -2,6 +2,8 @@
 
     namespace PricerunnerSDK\Parsers;
 
+    if (!defined('PRICRUNNER_OFFICIAL_PLUGIN_VERSION')) exit;
+    
     /**
      * Class StringParser
      * @package PricerunnerSDK\Parsers

@@ -9,6 +9,8 @@
     use PricerunnerSDK\Generators\FileGenerator;
     use PricerunnerSDK\Services\PricerunnerService;
 
+    if (!defined('PRICRUNNER_OFFICIAL_PLUGIN_VERSION')) exit;
+
     /**
      * Class PricerunnerSDK
      * @package PricerunnerSDK
