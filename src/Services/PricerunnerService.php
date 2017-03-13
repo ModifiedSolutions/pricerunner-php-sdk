@@ -18,8 +18,8 @@
             $curlOptions = array(
                 CURLOPT_URL => $url,
                 CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_FOLLOWLOCATION => false, // Disabled due to some hosts not allowing POST requests with this flag on.
+                // CURLOPT_MAXREDIRS => 10,
                 CURLOPT_POST => true,
                 CURLOPT_POSTFIELDS => $body,
                 CURLOPT_ENCODING => '',
